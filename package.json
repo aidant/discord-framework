@@ -1,0 +1,17 @@
+{
+  "type": "module",
+  "scripts": {
+    "start": "nodemon",
+    "build": "tsc",
+    "development": "node --experimental-modules --enable-source-maps lib/entrypoint.js"
+  },
+  "dependencies": {
+    "discord.js": "github:discordjs/discord.js"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.7",
+    "@types/ws": "^6.0.3",
+    "nodemon": "^1.19.4",
+    "typescript": "^3.8.0-dev.20191105"
+  }
+}
