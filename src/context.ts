@@ -1,37 +1,28 @@
-import { EventEmitter } from './event-emitter.js'
+export class Context <T> {
+  internalHooksIndex = 0
+  internalHooksState: unknown[] = []
 
-export class Context extends EventEmitter<{
-  'request-re-render': undefined
-  'reaction-added': string
-  'reaction-removed': string
-}> {
-  public hooksIndex: number = 0
-  public hooks: unknown[] = []
-  public reactions: { reaction?: string, reactions?: string[] } = {}
+  triggerReRender: Function
 
-  constructor () {
-    super()
-
-    this.on('reaction-added', (reaction: string) => {
-      this.reactions.reaction = reaction
-      this.emit('request-re-render', undefined)
-    })
-
-    this.on('reaction-removed', () => {
-      delete this.reactions.reaction
-      this.emit('request-re-render', undefined)
-    })
+  constructor (onRenderCallback: Function) {
+    this.triggerReRender = onRenderCallback
   }
 }
 
-let currentContext: Context | null = null
+let currentContext: Context<unknown> | null = null
 
-export const getCurrentContext = (): Context => {
-  if (currentContext === null) throw new Error()
-  return currentContext
+export const getCurrentContext = <T> (): Context<T> => {
+  if (currentContext === null) {
+    throw new Error('Invalid call to get current context.')
+  }
+
+  return currentContext as Context<T>
 }
 
-export const setCurrentContext = (context: Context | null) => {
-  if (context && currentContext !== null) throw new Error()
+export const setCurrentContext = <T> (context: Context<T> | null) => {
+  if (context && currentContext !== null) {
+    throw new Error('Cannot overwrite current context.')
+  }
+
   currentContext = context
 }
